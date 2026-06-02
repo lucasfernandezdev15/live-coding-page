@@ -44,7 +44,7 @@ export default function RickMortyExternalPrep() {
         <Link href="/" className="mb-3 inline-flex text-sm" style={{ color: 'var(--muted)' }}>
           ← Volver al dashboard
         </Link>
-        <h1 className="text-2xl font-bold sm:text-3xl" style={{ fontFamily: 'var(--font-display)', color: 'var(--accent)' }}>
+        <h1 className="text-2xl font-bold sm:text-3xl" style={{ fontFamily: 'var(--font-display)' }}>
           Apartado externo: Rick & Morty Challenge
         </h1>
         <p className="mt-2 text-sm" style={{ color: 'var(--muted)' }}>

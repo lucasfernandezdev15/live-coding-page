@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
-import { ArrowLeft, Lightbulb } from 'lucide-react'
+import { ArrowLeft, BookOpen } from 'lucide-react'
 import type { Challenge } from '@/lib/types'
 import ChallengeEditor from '@/components/ChallengeEditor'
 import HintPanel from '@/components/HintPanel'
@@ -178,7 +178,7 @@ export default function ChallengeWorkspace({ challenge }: { challenge: Challenge
         ) : null}
         <div className="mt-auto space-y-1 text-xs" style={{ color: 'var(--muted)' }}>
           <p>Atajos: Ctrl/Cmd+Enter (editor)</p>
-          <p>Esc (cerrar panel/modal), Ctrl/Cmd+Shift+H (hint)</p>
+          <p>Esc (cerrar panel/modal), Ctrl/Cmd+Shift+H (pistas)</p>
           <p>Ctrl/Cmd+Shift+R (reset)</p>
         </div>
       </aside>
@@ -203,10 +203,11 @@ export default function ChallengeWorkspace({ challenge }: { challenge: Challenge
           <button
             type="button"
             disabled={!state.hintAvailable}
-            className={`btn ${state.hintAvailable ? 'btn-amber hint-ready' : ''}`}
+            className={`btn ${state.hintAvailable ? 'btn-accent hint-available' : ''}`}
             onClick={() => dispatch({ type: 'OPEN_HINT' })}
           >
-            <Lightbulb size={14} /> {state.hintAvailable ? `💡 Hint available (${state.hintsUsed}/3)` : 'Hints unlock at 03:00'}
+            <BookOpen size={14} />
+            {state.hintAvailable ? `Pistas (${state.hintsUsed}/3)` : 'Pistas desde 03:00'}
           </button>
           <button type="button" className="btn" onClick={() => setShowResetBanner(true)}>
             Reset code

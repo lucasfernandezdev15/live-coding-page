@@ -105,11 +105,13 @@ export default function HomeDashboard() {
     <main className="mx-auto max-w-7xl px-3 py-5 sm:px-6 sm:py-8">
       <header className="mb-8 space-y-4">
         <div>
-          <h1 className="text-3xl font-bold sm:text-4xl" style={{ fontFamily: 'var(--font-display)', color: 'var(--accent)' }}>
+          <p className="kicker mb-2">Práctica de entrevistas</p>
+          <h1 className="text-3xl font-bold sm:text-4xl" style={{ fontFamily: 'var(--font-display)' }}>
             DevProbe
           </h1>
-          <p style={{ color: 'var(--muted)' }}>
-            Platform de práctica para entrevistas de live coding frontend senior.
+          <p className="mt-2 max-w-2xl leading-relaxed" style={{ color: 'var(--muted)' }}>
+            Ejercicios de live coding frontend: TypeScript, React, Next.js, datos, auth y testing. Sin chat ni prompts:
+            solo editor, tiempo y pistas graduales.
           </p>
           <Link href="/external/rick-morty-challenge" className="btn btn-mint mt-3">
             Apartado externo: Rick & Morty Challenge
