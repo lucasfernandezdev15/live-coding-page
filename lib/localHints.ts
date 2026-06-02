@@ -2,60 +2,60 @@ import type { Category, Challenge } from '@/lib/types'
 
 const HINT_BY_CATEGORY: Record<Category, string[]> = {
   TypeScript: [
-    'Empezá por la firma de tipos antes de implementar la utility; los tests al final validan que compile.',
-    'Para utilidades tipo Pick/Omit, combiná mapped types con Exclude de keys.',
-    'Evitá usar los built-in del ejercicio si el challenge pide implementarlos desde cero.',
-    'Si usás generics, revisá que `extends` restrinja correctamente en cada parámetro.',
-    'El reducer de eventos debe ser exhaustivo: el default con `assertNever` cubre casos imposibles.',
+    'Start with the type signature before implementing the utility; the tests at the bottom validate compilation.',
+    'For Pick/Omit-style utilities, combine mapped types with Exclude on keys.',
+    'Avoid built-ins when the challenge asks you to implement the utility from scratch.',
+    'With generics, check that `extends` constraints are applied correctly on each parameter.',
+    'Event reducers should be exhaustive: a default branch with `assertNever` covers impossible cases.',
   ],
   React: [
-    'Revisá si el estado se actualiza de forma inmutable y si los handlers no recrean objetos en cada render.',
-    'Separá estado de UI (tab activa) del estado de datos (lista de items).',
-    'En listas, usá un id estable como `key`, no el índice del array.',
-    'Para tabs sin refetch, mantené paneles montados y ocultá los inactivos con CSS.',
-    'Revisá dependencias del useEffect: valores stale suelen venir de closures mal declaradas.',
+    'Check whether state updates are immutable and handlers avoid recreating objects every render.',
+    'Separate UI state (active tab) from data state (item list).',
+    'In lists, use a stable id as `key`, not the array index.',
+    'For tabs without refetch, keep panels mounted and hide inactive ones with CSS.',
+    'Review useEffect dependencies: stale values often come from poorly declared closures.',
   ],
   'Next.js': [
-    'En pages router, providers globales (QueryClient, theme) van en `_app.tsx`.',
-    'SSR con styled-components en pages router se configura en `_document.tsx`.',
-    'Para datos por request usá `getServerSideProps`; para estáticos, `getStaticProps`.',
-    'Sincronizar filtros con la URL: `router.push` con query params sin perder otros params.',
-    'En App Router vs pages: `useRouter` viene de `next/router` en pages, no de `next/navigation`.',
+    'In the pages router, global providers (QueryClient, theme) belong in `_app.tsx`.',
+    'SSR with styled-components in the pages router is configured in `_document.tsx`.',
+    'For per-request data use `getServerSideProps`; for static data, `getStaticProps`.',
+    'Sync filters with the URL via `router.push` and query params without dropping other params.',
+    'Pages router: `useRouter` comes from `next/router`, not `next/navigation` (App Router).',
   ],
   'React Query': [
-    'La query key debe incluir recurso + página + filtros que cambian.',
-    '`staleTime` alto evita refetch al volver a una pestaña ya cargada.',
-    'En v5 el tiempo de GC es `gcTime` (antes `cacheTime` en v4).',
-    'Separá cache: `["characters", page]` vs `["locations", page]`.',
-    'Con paginación, `placeholderData` / keepPreviousData evita pantalla vacía al cambiar página.',
+    'The query key should include resource + page + any changing filters.',
+    'A high `staleTime` avoids refetch when returning to an already loaded tab.',
+    'In v5, garbage collection time is `gcTime` (was `cacheTime` in v4).',
+    'Split cache keys: `["characters", page]` vs `["locations", page]`.',
+    'With pagination, `placeholderData` / keepPreviousData avoids an empty screen when changing pages.',
   ],
   Zustand: [
-    'Mantené el store pequeño: estado global solo para lo que varias pantallas necesitan.',
-    'Acciones en el store deben ser puras respecto al estado previo (sin mutar fuera de set).',
-    'Para selectores, evitá suscribirse a todo el store si solo necesitás un slice.',
-    'Si combinás con React Query, el servidor va en queries y la UI local en Zustand.',
-    'Documentá qué va al store vs props para justificarlo en entrevista.',
+    'Keep the store small: global state only for what multiple screens need.',
+    'Store actions should be pure with respect to previous state (no mutation outside set).',
+    'For selectors, avoid subscribing to the whole store if you only need a slice.',
+    'With React Query, server data lives in queries; local UI state can live in Zustand.',
+    'Document what goes in the store vs props so you can justify it in an interview.',
   ],
   Auth: [
-    'No guardes tokens en localStorage si el brief pide cookies httpOnly.',
-    'Protegé rutas en el servidor (middleware o getServerSideProps), no solo ocultando links.',
-    'Manejá refresh/expiración de sesión y estados loading mientras validás el token.',
-    'Separá “usuario autenticado” de “permisos/roles” en el modelo de datos.',
-    'En errores 401, redirigí a login con returnUrl para mejor UX.',
+    'Do not store tokens in localStorage if the brief requires httpOnly cookies.',
+    'Protect routes on the server (middleware or getServerSideProps), not only by hiding links.',
+    'Handle session refresh/expiry and loading states while validating the token.',
+    'Separate “authenticated user” from “permissions/roles” in your data model.',
+    'On 401 errors, redirect to login with a returnUrl for better UX.',
   ],
   Testing: [
-    'Testeá comportamiento (cambio de tab, error API), no detalles de implementación interna.',
-    'Con React Query en tests, QueryClient nuevo por test y limpiá cache entre casos.',
-    'Preferí `getByRole` y `userEvent` sobre testIds salvo que sea inevitable.',
-    'Para debounce, `jest.useFakeTimers()` y `advanceTimersByTime`.',
-    'Mockeá el cliente HTTP y contá llamadas al cambiar de pestaña si el brief pide no-refetch.',
+    'Test behavior (tab change, API error), not internal implementation details.',
+    'With React Query in tests, use a fresh QueryClient per test and clear cache between cases.',
+    'Prefer `getByRole` and `userEvent` over testIds unless unavoidable.',
+    'For debounce, use `jest.useFakeTimers()` and `advanceTimersByTime`.',
+    'Mock the HTTP client and count calls on tab change when the brief requires no refetch.',
   ],
 }
 
 const STAGE_PREFIX: Record<number, string> = {
-  1: 'Empezá por el requisito principal del enunciado y el flujo mínimo que lo cumple.',
-  2: 'Compará tu código con lo que pide el challenge: qué caso cubre cada parte y qué falta.',
-  3: 'Pensá en el edge case más probable en producción y cómo lo explicarías en entrevista.',
+  1: 'Start with the main requirement and the smallest flow that satisfies it.',
+  2: 'Compare your code to what the challenge asks: which cases each part covers and what is missing.',
+  3: 'Think about the most likely production edge case and how you would explain your approach in an interview.',
 }
 
 function hashId(id: string): number {
@@ -73,7 +73,7 @@ export function pickLocalHint(challenge: Challenge, hintNumber: number): string 
   const stage = STAGE_PREFIX[hintNumber] ?? STAGE_PREFIX[1]
   const footer =
     hintNumber === 3
-      ? ' (Hints locales: añadí GEMINI_API_KEY gratis en aistudio.google.com o ANTHROPIC_API_KEY en .env.local para ayuda con tu código.)'
+      ? ' (Local hints: add GEMINI_API_KEY at aistudio.google.com or ANTHROPIC_API_KEY in .env.local for code-aware help.)'
       : ''
 
   return `Hint ${hintNumber}/3 — ${challenge.title}\n\n${stage}\n\n${topic}${footer}`

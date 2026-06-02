@@ -6,11 +6,11 @@ Point them in the right direction without giving away the answer.
 Adjust based on hintNumber: hint 1 = conceptual nudge, hint 2 = more specific,
 hint 3 = almost a direct pointer to the exact line/approach needed.
 Never show code. Never reveal the full solution.
-Respond in the same language as the challenge title and instructions (Spanish if they are in Spanish).`
+Always respond in English.`
 
 function truncateCode(code: string, max = 8000): string {
   if (code.length <= max) return code
-  return `${code.slice(0, max)}\n... (código truncado)`
+  return `${code.slice(0, max)}\n... (code truncated)`
 }
 
 export function buildHintUserPrompt(challenge: Challenge, currentCode: string, hintNumber: number): string {

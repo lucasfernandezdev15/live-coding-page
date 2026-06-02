@@ -105,13 +105,13 @@ export default function HomeDashboard() {
     <main className="mx-auto max-w-7xl px-3 py-5 sm:px-6 sm:py-8">
       <header className="mb-8 space-y-4">
         <div>
-          <p className="kicker mb-2">Práctica de entrevistas</p>
+          <p className="kicker mb-2">Interview practice</p>
           <h1 className="text-3xl font-bold sm:text-4xl" style={{ fontFamily: 'var(--font-display)' }}>
             DevProbe
           </h1>
           <p className="mt-2 max-w-2xl leading-relaxed" style={{ color: 'var(--muted)' }}>
-            Ejercicios de live coding frontend: TypeScript, React, Next.js, datos, auth y testing. Sin chat ni prompts:
-            solo editor, tiempo y pistas graduales.
+            Frontend live-coding exercises: TypeScript, React, Next.js, data fetching, auth, and testing. No chat UI—just
+            an editor, a timer, and gradual hints.
           </p>
         </div>
         <div className="flex flex-wrap gap-3 text-xs">
@@ -170,11 +170,11 @@ export default function HomeDashboard() {
 
       <section className="mb-4 rounded-md border p-3" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
         <div className="mb-2 text-xs" style={{ color: 'var(--muted)' }}>
-          Tracks de práctica
+          Practice tracks
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <button type="button" className={`btn ${level === 'all' ? 'btn-accent' : ''}`} onClick={() => setLevel('all')}>
-            Todos
+            All
           </button>
           {(['junior', 'mid', 'senior'] as const).map((key) => (
             <button
@@ -191,11 +191,11 @@ export default function HomeDashboard() {
 
       <section className="mb-4 rounded-md border p-3" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
         <div className="mb-2 text-xs" style={{ color: 'var(--muted)' }}>
-          Ronda de entrevista
+          Interview round
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <button type="button" className={`btn ${round === 'all' ? 'btn-accent' : ''}`} onClick={() => setRound('all')}>
-            Todas
+            All
           </button>
           <button type="button" className={`btn ${round === 'js-utils' ? 'btn-accent' : ''}`} onClick={() => setRound('js-utils')}>
             JS utilities

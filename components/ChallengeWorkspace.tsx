@@ -143,7 +143,7 @@ export default function ChallengeWorkspace({ challenge }: { challenge: Challenge
     <main className="grid min-h-screen grid-cols-1 gap-0 lg:h-screen lg:grid-cols-[38%_62%]">
       <aside className="border-b px-3 py-4 lg:border-b-0 lg:border-r lg:px-6 lg:py-5" style={{ borderColor: 'var(--border)', background: 'var(--bg-2)' }}>
         <Link href="/" className="mb-4 inline-flex items-center gap-2 text-sm" style={{ color: 'var(--muted)' }}>
-          <ArrowLeft size={14} /> Volver
+          <ArrowLeft size={14} /> Back
         </Link>
         <div className="mb-3 flex flex-wrap gap-2">
           <span className="badge" style={{ color: 'var(--accent)' }}>{challenge.category}</span>
@@ -180,20 +180,20 @@ export default function ChallengeWorkspace({ challenge }: { challenge: Challenge
         </div>
         {showRevealConfirm ? (
           <div className="mb-4 rounded-md border p-3 text-sm" style={{ borderColor: 'var(--red)', background: 'var(--red-bg)' }}>
-            Aun no pasaron 5 minutos. Ver la solucion ahora puede reducir el valor de la practica.
+            Five minutes have not passed yet. Revealing the solution now may reduce the value of the practice.
             <div className="mt-2 flex flex-wrap gap-2">
               <button type="button" className="btn btn-red" onClick={revealSolution}>
-                Ver igual
+                Reveal anyway
               </button>
               <button type="button" className="btn" onClick={() => setShowRevealConfirm(false)}>
-                Seguir intentando
+                Keep trying
               </button>
             </div>
           </div>
         ) : null}
         <div className="mt-auto space-y-1 text-xs" style={{ color: 'var(--muted)' }}>
-          <p>Atajos: Ctrl/Cmd+Enter (editor)</p>
-          <p>Esc (cerrar panel/modal), Ctrl/Cmd+Shift+H (pistas)</p>
+          <p>Shortcuts: Ctrl/Cmd+Enter (editor)</p>
+          <p>Esc (close panel/modal), Ctrl/Cmd+Shift+H (hints)</p>
           <p>Ctrl/Cmd+Shift+R (reset)</p>
         </div>
       </aside>
@@ -222,7 +222,7 @@ export default function ChallengeWorkspace({ challenge }: { challenge: Challenge
             onClick={() => dispatch({ type: 'OPEN_HINT' })}
           >
             <BookOpen size={14} />
-            {state.hintAvailable ? `Pistas (${state.hintsUsed}/3)` : 'Pistas desde 01:00'}
+            {state.hintAvailable ? `Hints (${state.hintsUsed}/3)` : 'Hints at 01:00'}
           </button>
           <button type="button" className="btn" onClick={() => setShowResetBanner(true)}>
             Reset code
@@ -260,10 +260,10 @@ export default function ChallengeWorkspace({ challenge }: { challenge: Challenge
               >
                 <button type="button" className="btn btn-accent" onClick={runPreview}>
                   <Play size={14} />
-                  {previewPending ? 'Actualizar vista previa' : 'Volver a ejecutar'}
+                  {previewPending ? 'Update preview' : 'Run again'}
                 </button>
                 <span className="text-xs" style={{ color: previewPending ? 'var(--amber)' : 'var(--muted)' }}>
-                  {previewPending ? 'Hay cambios sin aplicar' : 'Vista previa al día'}
+                  {previewPending ? 'Unapplied changes' : 'Preview up to date'}
                 </span>
               </div>
               <div className="min-h-0 flex-1">

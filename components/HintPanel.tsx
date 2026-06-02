@@ -17,13 +17,13 @@ type HintItem = { id: number; text: string; open: boolean; source?: HintSource }
 const SOURCE_LABEL: Record<HintSource, string> = {
   anthropic: 'Mentor',
   gemini: 'Mentor',
-  local: 'Guía del ejercicio',
+  local: 'Exercise guide',
 }
 
 const STAGE_LABEL: Record<number, string> = {
-  1: 'Orientación',
-  2: 'Enfoque',
-  3: 'Cierre',
+  1: 'Orientation',
+  2: 'Focus',
+  3: 'Wrap-up',
 }
 
 function parseHintSource(value: string | null): HintSource | undefined {
@@ -84,7 +84,7 @@ export default function HintPanel({
       setHints((prev) =>
         prev.map((item) =>
           item.id === nextNumber
-            ? { ...item, text: `No se pudo cargar la pista: ${(error as Error).message}`, source: 'local' }
+            ? { ...item, text: `Could not load hint: ${(error as Error).message}`, source: 'local' }
             : item,
         ),
       )
@@ -98,7 +98,7 @@ export default function HintPanel({
       <button
         type="button"
         className="absolute inset-0"
-        aria-label="Cerrar pistas"
+        aria-label="Close hints"
         style={{ background: 'rgba(19, 18, 17, 0.72)' }}
         onClick={onClose}
       />
@@ -109,42 +109,39 @@ export default function HintPanel({
         <header className="border-b px-4 py-4" style={{ borderColor: 'var(--border)' }}>
           <div className="mb-1 flex items-start justify-between gap-3">
             <div>
-              <p className="kicker mb-1">Cuaderno de pistas</p>
+              <p className="kicker mb-1">Hint notebook</p>
               <h3 className="text-lg font-semibold" style={{ fontFamily: 'var(--font-display)' }}>
                 {challenge.title}
               </h3>
             </div>
-            <button type="button" className="btn shrink-0" onClick={onClose} aria-label="Cerrar">
-              Cerrar
+            <button type="button" className="btn shrink-0" onClick={onClose} aria-label="Close">
+              Close
             </button>
           </div>
           <p className="text-xs" style={{ color: 'var(--muted)' }}>
-            {hintsUsed}/3 pistas usadas · máximo 3 por sesión
+            {hintsUsed}/3 hints used · 3 max per session
           </p>
         </header>
 
         <div className="flex-1 space-y-3 overflow-auto px-4 py-4">
           {hints.length === 0 ? (
             <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
-              Pedí una pista cuando te trabes. No muestran la solución completa: van de orientación general a un empujón más
-              concreto.
+              Request a hint when you are stuck. Hints do not reveal the full solution: they go from general orientation to a
+              more specific nudge.
             </p>
           ) : null}
           {hints.map((hint) => (
-            <article
-              key={hint.id}
-              className={`pista-card panel p-3 ${hint.open ? 'is-open' : ''}`}
-            >
+            <article key={hint.id} className={`hint-card panel p-3 ${hint.open ? 'is-open' : ''}`}>
               <button
                 type="button"
                 className="mb-2 flex w-full items-center justify-between gap-2 text-left"
                 onClick={() => setHints((prev) => prev.map((item) => (item.id === hint.id ? { ...item, open: !item.open } : item)))}
               >
                 <span className="text-sm font-medium">
-                  Pista {hint.id} · {STAGE_LABEL[hint.id]}
+                  Hint {hint.id} · {STAGE_LABEL[hint.id]}
                 </span>
                 <span className="text-xs" style={{ color: 'var(--dim)' }}>
-                  {hint.open ? 'Ocultar' : 'Ver'}
+                  {hint.open ? 'Hide' : 'Show'}
                 </span>
               </button>
               {hint.source ? (
@@ -154,7 +151,7 @@ export default function HintPanel({
               ) : null}
               {hint.open ? (
                 <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: 'var(--text)' }}>
-                  {hint.text || (loading && hint.id === hintsUsed + 1 ? 'Escribiendo…' : '…')}
+                  {hint.text || (loading && hint.id === hintsUsed + 1 ? 'Writing…' : '…')}
                 </p>
               ) : null}
             </article>
@@ -168,7 +165,7 @@ export default function HintPanel({
             onClick={getHint}
             disabled={hintsUsed >= 3 || loading}
           >
-            {loading ? 'Preparando pista…' : hintsUsed >= 3 ? 'Sin pistas restantes' : `Pedir pista ${hintsUsed + 1}`}
+            {loading ? 'Preparing hint…' : hintsUsed >= 3 ? 'No hints left' : `Get hint ${hintsUsed + 1}`}
           </button>
         </footer>
       </aside>

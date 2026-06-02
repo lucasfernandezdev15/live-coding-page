@@ -8,7 +8,7 @@ class PreviewErrorBoundary extends Component<{ children: ReactNode }, { message:
   state = { message: null }
 
   static getDerivedStateFromError(error: Error) {
-    return { message: error.message || 'Error en la vista previa' }
+    return { message: error.message || 'Preview error' }
   }
 
   render() {
@@ -20,7 +20,7 @@ class PreviewErrorBoundary extends Component<{ children: ReactNode }, { message:
         >
           {this.state.message}
           {'\n\n'}
-          Corregí el código y pulsá «Actualizar vista previa».
+          Fix your code and click “Update preview”.
         </pre>
       )
     }
