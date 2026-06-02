@@ -1,8 +1,32 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useMemo } from 'react'
+import { Component, type ReactNode, useMemo } from 'react'
 import type { Challenge } from '@/lib/types'
+
+class PreviewErrorBoundary extends Component<{ children: ReactNode }, { message: string | null }> {
+  state = { message: null }
+
+  static getDerivedStateFromError(error: Error) {
+    return { message: error.message || 'Error en la vista previa' }
+  }
+
+  render() {
+    if (this.state.message) {
+      return (
+        <pre
+          className="h-full overflow-auto p-3 text-xs leading-relaxed"
+          style={{ color: 'var(--red)', background: 'var(--surface)', fontFamily: 'var(--font-mono)' }}
+        >
+          {this.state.message}
+          {'\n\n'}
+          Corregí el código y pulsá «Actualizar vista previa».
+        </pre>
+      )
+    }
+    return this.props.children
+  }
+}
 
 const Sandpack = dynamic(
   async () => {
@@ -20,13 +44,13 @@ const Sandpack = dynamic(
           files={files}
           customSetup={{ dependencies }}
           theme="dark"
-          options={{ recompileMode: 'immediate' }}
+          options={{ recompileMode: 'delayed', recompileDelay: 400 }}
         >
           <mod.SandpackLayout style={{ height: '100%' }}>
             <mod.SandpackPreview
               style={{ height: '100%', border: '0', background: 'var(--bg)' }}
               showNavigator={false}
-              showRefreshButton
+              showRefreshButton={false}
               showOpenInCodeSandbox={false}
             />
           </mod.SandpackLayout>
@@ -56,13 +80,9 @@ export default function SandpackPreview({ code, challenge }: Props) {
     }
   }, [challenge, code])
 
-  try {
-    return <Sandpack files={files} dependencies={dependencies} />
-  } catch (error) {
-    return (
-      <pre className="h-full overflow-auto rounded-md p-3 text-xs" style={{ color: 'var(--red)', background: 'var(--surface)', fontFamily: 'var(--font-mono)' }}>
-        {(error as Error).message}
-      </pre>
-    )
-  }
+  return (
+    <PreviewErrorBoundary>
+      <Sandpack files={files} dependencies={dependencies} />
+    </PreviewErrorBoundary>
+  )
 }

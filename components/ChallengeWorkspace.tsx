@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
-import { ArrowLeft, BookOpen } from 'lucide-react'
+import { ArrowLeft, BookOpen, Play } from 'lucide-react'
 import type { Challenge } from '@/lib/types'
 import ChallengeEditor from '@/components/ChallengeEditor'
 import HintPanel from '@/components/HintPanel'
@@ -79,7 +79,22 @@ export default function ChallengeWorkspace({ challenge }: { challenge: Challenge
   const [showRevealConfirm, setShowRevealConfirm] = useState(false)
   const [timerResetSignal, setTimerResetSignal] = useState(0)
   const [fastTyping, setFastTyping] = useState(false)
+  const [previewCode, setPreviewCode] = useState(challenge.starterCode)
+  const [previewKey, setPreviewKey] = useState(0)
   const editorContainerRef = useRef<HTMLDivElement>(null)
+
+  const hasLivePreview = challenge.previewType === 'react' || challenge.previewType === 'nextjs'
+  const previewPending = hasLivePreview && previewCode !== state.code
+
+  useEffect(() => {
+    setPreviewCode(challenge.starterCode)
+    setPreviewKey((key) => key + 1)
+  }, [challenge.id, challenge.starterCode])
+
+  function runPreview() {
+    setPreviewCode(state.code)
+    setPreviewKey((key) => key + 1)
+  }
 
   useEffect(() => {
     if (state.code === challenge.starterCode) return
@@ -186,7 +201,7 @@ export default function ChallengeWorkspace({ challenge }: { challenge: Challenge
       <section className="grid min-h-0 grid-rows-[auto_auto_minmax(220px,1fr)_minmax(260px,1.1fr)] p-3 lg:grid-rows-[auto_minmax(0,1fr)_minmax(0,1.2fr)] lg:p-4">
         <header className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-md border p-2" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
           <Timer
-            onThreeMinutes={() => dispatch({ type: 'SET_HINT_AVAILABLE' })}
+            onHintUnlock={() => dispatch({ type: 'SET_HINT_AVAILABLE' })}
             onTick={(value) => dispatch({ type: 'SET_ELAPSED', payload: value })}
             resetSignal={timerResetSignal}
           />
@@ -207,7 +222,7 @@ export default function ChallengeWorkspace({ challenge }: { challenge: Challenge
             onClick={() => dispatch({ type: 'OPEN_HINT' })}
           >
             <BookOpen size={14} />
-            {state.hintAvailable ? `Pistas (${state.hintsUsed}/3)` : 'Pistas desde 03:00'}
+            {state.hintAvailable ? `Pistas (${state.hintsUsed}/3)` : 'Pistas desde 01:00'}
           </button>
           <button type="button" className="btn" onClick={() => setShowResetBanner(true)}>
             Reset code
@@ -223,6 +238,8 @@ export default function ChallengeWorkspace({ challenge }: { challenge: Challenge
                 className="btn btn-amber"
                 onClick={() => {
                   dispatch({ type: 'RESET_CODE', payload: challenge.starterCode })
+                  setPreviewCode(challenge.starterCode)
+                  setPreviewKey((key) => key + 1)
                   setTimerResetSignal((prev) => prev + 1)
                   setShowResetBanner(false)
                 }}
@@ -234,9 +251,25 @@ export default function ChallengeWorkspace({ challenge }: { challenge: Challenge
           </div>
         ) : null}
 
-        <div className="mb-3 min-h-0 overflow-hidden rounded-md border" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
-          {challenge.previewType === 'react' || challenge.previewType === 'nextjs' ? (
-            <SandpackPreview code={state.code} challenge={challenge} />
+        <div className="mb-3 flex min-h-0 flex-col overflow-hidden rounded-md border" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
+          {hasLivePreview ? (
+            <>
+              <div
+                className="flex flex-wrap items-center justify-between gap-2 border-b px-3 py-2"
+                style={{ borderColor: 'var(--border)' }}
+              >
+                <button type="button" className="btn btn-accent" onClick={runPreview}>
+                  <Play size={14} />
+                  {previewPending ? 'Actualizar vista previa' : 'Volver a ejecutar'}
+                </button>
+                <span className="text-xs" style={{ color: previewPending ? 'var(--amber)' : 'var(--muted)' }}>
+                  {previewPending ? 'Hay cambios sin aplicar' : 'Vista previa al día'}
+                </span>
+              </div>
+              <div className="min-h-0 flex-1">
+                <SandpackPreview key={previewKey} code={previewCode} challenge={challenge} />
+              </div>
+            </>
           ) : (
             <div className="h-full overflow-auto p-4" style={{ background: 'var(--surface)', fontFamily: 'var(--font-mono)' }}>
               <p className="mb-2" style={{ color: 'var(--accent)' }}>Output panel</p>

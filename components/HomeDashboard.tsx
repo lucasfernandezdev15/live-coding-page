@@ -113,9 +113,6 @@ export default function HomeDashboard() {
             Ejercicios de live coding frontend: TypeScript, React, Next.js, datos, auth y testing. Sin chat ni prompts:
             solo editor, tiempo y pistas graduales.
           </p>
-          <Link href="/external/rick-morty-challenge" className="btn btn-mint mt-3">
-            Apartado externo: Rick & Morty Challenge
-          </Link>
         </div>
         <div className="flex flex-wrap gap-3 text-xs">
           {LEGEND.map((item) => (

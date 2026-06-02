@@ -1,5 +1,5 @@
-import RickMortyExternalPrep from '@/components/RickMortyExternalPrep'
+import { redirect } from 'next/navigation'
 
 export default function RickMortyExternalPage() {
-  return <RickMortyExternalPrep />
+  redirect('/')
 }

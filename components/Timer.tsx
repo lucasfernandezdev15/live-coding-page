@@ -2,8 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 
+const HINT_UNLOCK_SECONDS = 60
+
 interface Props {
-  onThreeMinutes: () => void
+  onHintUnlock: () => void
   onTick?: (elapsedSeconds: number) => void
   resetSignal?: number
 }
@@ -14,7 +16,7 @@ function formatElapsed(seconds: number): string {
   return `${mm}:${ss}`
 }
 
-export default function Timer({ onThreeMinutes, onTick, resetSignal = 0 }: Props) {
+export default function Timer({ onHintUnlock, onTick, resetSignal = 0 }: Props) {
   const [seconds, setSeconds] = useState(0)
   const fired = useRef(false)
 
@@ -30,15 +32,15 @@ export default function Timer({ onThreeMinutes, onTick, resetSignal = 0 }: Props
 
   useEffect(() => {
     onTick?.(seconds)
-    if (!fired.current && seconds >= 180) {
+    if (!fired.current && seconds >= HINT_UNLOCK_SECONDS) {
       fired.current = true
-      onThreeMinutes()
+      onHintUnlock()
     }
-  }, [onThreeMinutes, onTick, seconds])
+  }, [onHintUnlock, onTick, seconds])
 
   const color = useMemo(() => {
     if (seconds >= 300) return 'var(--red)'
-    if (seconds >= 180) return 'var(--amber)'
+    if (seconds >= HINT_UNLOCK_SECONDS) return 'var(--amber)'
     return 'var(--muted)'
   }, [seconds])
 
