@@ -20,7 +20,7 @@ class PreviewErrorBoundary extends Component<{ children: ReactNode }, { message:
         >
           {this.state.message}
           {'\n\n'}
-          Fix your code and click “Update preview”.
+          Fix your code and click “Run preview” again.
         </pre>
       )
     }

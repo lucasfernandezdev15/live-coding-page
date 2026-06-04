@@ -79,21 +79,24 @@ export default function ChallengeWorkspace({ challenge }: { challenge: Challenge
   const [showRevealConfirm, setShowRevealConfirm] = useState(false)
   const [timerResetSignal, setTimerResetSignal] = useState(0)
   const [fastTyping, setFastTyping] = useState(false)
-  const [previewCode, setPreviewCode] = useState(challenge.starterCode)
+  const [previewActive, setPreviewActive] = useState(false)
+  const [previewCode, setPreviewCode] = useState('')
   const [previewKey, setPreviewKey] = useState(0)
   const editorContainerRef = useRef<HTMLDivElement>(null)
 
   const hasLivePreview = challenge.previewType === 'react' || challenge.previewType === 'nextjs'
-  const previewPending = hasLivePreview && previewCode !== state.code
+  const previewPending = previewActive && previewCode !== state.code
 
   useEffect(() => {
-    setPreviewCode(challenge.starterCode)
+    setPreviewActive(false)
+    setPreviewCode('')
     setPreviewKey((key) => key + 1)
-  }, [challenge.id, challenge.starterCode])
+  }, [challenge.id])
 
   function runPreview() {
     setPreviewCode(state.code)
     setPreviewKey((key) => key + 1)
+    setPreviewActive(true)
   }
 
   useEffect(() => {
@@ -238,7 +241,8 @@ export default function ChallengeWorkspace({ challenge }: { challenge: Challenge
                 className="btn btn-amber"
                 onClick={() => {
                   dispatch({ type: 'RESET_CODE', payload: challenge.starterCode })
-                  setPreviewCode(challenge.starterCode)
+                  setPreviewActive(false)
+                  setPreviewCode('')
                   setPreviewKey((key) => key + 1)
                   setTimerResetSignal((prev) => prev + 1)
                   setShowResetBanner(false)
@@ -260,14 +264,29 @@ export default function ChallengeWorkspace({ challenge }: { challenge: Challenge
               >
                 <button type="button" className="btn btn-accent" onClick={runPreview}>
                   <Play size={14} />
-                  {previewPending ? 'Update preview' : 'Run again'}
+                  {!previewActive ? 'Run preview' : previewPending ? 'Update preview' : 'Run again'}
                 </button>
                 <span className="text-xs" style={{ color: previewPending ? 'var(--amber)' : 'var(--muted)' }}>
-                  {previewPending ? 'Unapplied changes' : 'Preview up to date'}
+                  {!previewActive
+                    ? 'Preview hidden until you run'
+                    : previewPending
+                      ? 'Unapplied changes'
+                      : 'Preview up to date'}
                 </span>
               </div>
               <div className="min-h-0 flex-1">
-                <SandpackPreview key={previewKey} code={previewCode} challenge={challenge} />
+                {previewActive ? (
+                  <SandpackPreview key={previewKey} code={previewCode} challenge={challenge} />
+                ) : (
+                  <div
+                    className="flex h-full min-h-[180px] flex-col items-center justify-center gap-3 p-6 text-center"
+                    style={{ background: 'var(--bg-2)' }}
+                  >
+                    <p className="max-w-sm text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
+                      The live preview does not run while you type. Click Run preview when you want to see your UI.
+                    </p>
+                  </div>
+                )}
               </div>
             </>
           ) : (
