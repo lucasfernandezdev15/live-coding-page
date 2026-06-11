@@ -113,6 +113,17 @@ export default function HomeDashboard() {
             Frontend live-coding exercises: TypeScript, React, Next.js, data fetching, auth, and testing. No chat UI—just
             an editor, a timer, and gradual hints.
           </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Link href="/external/interview-drills" className="btn btn-mint">
+              Technical interview drills
+            </Link>
+            <Link href="/external/interview-drills?tab=sanity" className="btn btn-mint">
+              Sanity CMS prep
+            </Link>
+            <Link href="/interview-simulator/g2i" className="btn btn-accent">
+              G2i interview simulator
+            </Link>
+          </div>
         </div>
         <div className="flex flex-wrap gap-3 text-xs">
           {LEGEND.map((item) => (
