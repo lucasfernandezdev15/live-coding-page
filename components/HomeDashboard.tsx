@@ -123,6 +123,12 @@ export default function HomeDashboard() {
             <Link href="/interview-simulator/g2i" className="btn btn-accent">
               G2i interview simulator
             </Link>
+            <Link href="/g2i/teoria" className="btn btn-accent">
+              G2i Teoría
+            </Link>
+            <Link href="/g2i/practica" className="btn btn-accent">
+              G2i Práctica
+            </Link>
           </div>
         </div>
         <div className="flex flex-wrap gap-3 text-xs">
