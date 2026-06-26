@@ -26,9 +26,10 @@ export const g2iEvaluationCriteria = [
 
 export const g2iPrepResources = [
   {
-    title: 'JavaScript best practices',
-    url: 'https://exploringjs.com/impatient-js/index.html',
-    description: 'Modern JS concepts and idioms (Exploring JS).',
+    title: 'Exploring JavaScript (ex "JS for impatient programmers")',
+    url: 'https://exploringjs.com/js/book/index.html',
+    description:
+      'Fundamentos modernos de JS, gratis online. El link del brief de G2i (impatient-js) está desactualizado; el libro se renombró y mudó acá.',
   },
   {
     title: 'React main concepts',

@@ -60,6 +60,7 @@ export const g2iTheoryStudyTips = [
   'Si no sabés algo, decí cómo lo investigarías; G2i valora honestidad y razonamiento sobre memorización.',
   'Conectá cada respuesta con experiencia real: "en un proyecto tuve este bug y lo resolví así".',
   'Para preguntas de performance, siempre mencioná medir primero (Profiler, Performance tab) antes de optimizar.',
+  'Recursos oficiales que recomienda G2i: Exploring JS (impatient-js) para fundamentos de JavaScript y react.dev/learn (Main Concepts / Thinking in React) para React.',
 ]
 
 export const g2iTheoryQuestions: G2iTheoryQuestion[] = [
@@ -381,6 +382,22 @@ export const g2iTheoryQuestions: G2iTheoryQuestion[] = [
     answer:
       'La `key` le permite a React identificar cada elemento entre renders durante la reconciliación, para reusar/mover/remover el nodo correcto en vez de recrear todo. Si la lista es estática y nunca reordena ni inserta en el medio, el índice funciona. Pero si insertás, borrás o reordenás, el índice como key hace que React asocie el estado/DOM equivocado al elemento: inputs que conservan el valor de otra fila, animaciones rotas, checkboxes que se "mueven". La key correcta es un id estable del dato. Regla: índice solo en listas inmutables y sin estado por item.',
     tags: ['keys', 'reconciliation', 'lists'],
+  },
+  {
+    id: 'th-react-13',
+    category: 'react',
+    difficulty: 'mid',
+    question:
+      'Explicá el proceso de "Thinking in React" (cómo encarás construir una UI desde un mockup y una API). ¿Qué dato es estado y qué no?',
+    hints: [
+      'Son 5 pasos según la doc oficial de React.',
+      'Para decidir si algo es estado, hacete 3 preguntas.',
+    ],
+    answer:
+      'La doc oficial de React define 5 pasos: (1) Dividir la UI en una jerarquía de componentes (cada componente con una sola responsabilidad; el JSON suele mapear a la estructura). (2) Construir una versión estática solo con props, sin estado, con data fluyendo de arriba hacia abajo (one-way data flow). (3) Encontrar la representación mínima y completa del estado (DRY): nada que se pueda derivar debería ser estado. (4) Decidir dónde vive cada estado: identificar los componentes que lo usan, su ancestro común más cercano, y poner el estado ahí (o en un componente por encima). (5) Agregar el flujo inverso: pasar callbacks hacia abajo para que los hijos actualicen el estado del padre. Para saber si algo es estado, preguntá: ¿se mantiene igual en el tiempo? (no es estado) ¿viene por props? (no es estado) ¿se puede computar de otro estado/props? (no es estado). Lo que queda, es estado. Ejemplo: el texto del buscador y el checkbox son estado; la lista filtrada NO (se computa).',
+    tags: ['thinking-in-react', 'state', 'fundamentals', 'data-flow'],
+    reportedByG2i: true,
+    sourceNote: 'Basado en react.dev/learn/thinking-in-react, uno de los recursos oficiales que G2i recomienda estudiar.',
   },
   {
     id: 'th-react-12',

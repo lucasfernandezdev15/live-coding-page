@@ -18,6 +18,7 @@ import {
   g2iPracticeExercises,
   g2iPracticeFormatSummary,
   g2iPracticeSandboxTips,
+  g2iVettingProcess,
   openTriviaApiNotes,
   type G2iPracticeCategory,
   type G2iPracticeDifficulty,
@@ -319,8 +320,22 @@ export default function G2iStudyHub({ initialTab = 'theory' }: Props) {
         </>
       ) : (
         <>
+          <section className="mb-6 rounded-lg border p-4" style={{ borderColor: 'var(--accent)', background: 'var(--surface)' }}>
+            <div className="mb-2 flex flex-wrap items-center gap-2">
+              <h2 className="text-lg font-semibold">Proceso de vetting de G2i</h2>
+              <span className="badge" style={{ background: 'var(--accent)', color: '#0b0b0b', fontWeight: 600 }}>
+                ✓ Verificado (FAQ oficial)
+              </span>
+            </div>
+            <ol className="list-decimal space-y-1 pl-5 text-sm leading-relaxed">
+              {g2iVettingProcess.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ol>
+          </section>
+
           <section className="mb-6 rounded-lg border p-4" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
-            <h2 className="mb-2 text-lg font-semibold">Formato del live coding</h2>
+            <h2 className="mb-2 text-lg font-semibold">Formato del live coding y del code challenge</h2>
             <ul className="mb-4 list-disc space-y-1 pl-5 text-sm leading-relaxed">
               {g2iPracticeFormatSummary.map((line) => (
                 <li key={line}>{line}</li>

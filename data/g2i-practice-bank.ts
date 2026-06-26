@@ -46,12 +46,24 @@ export const G2I_PRACTICE_CATEGORY_LABEL: Record<G2iPracticeCategory, string> = 
   css: 'CSS',
 }
 
+// Proceso de vetting verificado (FAQ oficial de G2i): revisión de CV → entrevista
+// de screening → code challenge de 6 a 8 h → entrevista técnica. El recording de la
+// técnica y el código del challenge se comparten con los clientes.
+export const g2iVettingProcess = [
+  '1) Revisión de CV/perfil (GitHub, LinkedIn, resume).',
+  '2) Entrevista de screening (charla, evalúa inglés y experiencia; G2i requiere inglés fluido).',
+  '3) Code challenge de 6 a 8 horas — "se hace una sola vez y nunca más". El código se comparte con los clientes.',
+  '4) Entrevista técnica de ~45 min con otro dev React (snippets + preguntas). Se graba y se comparte con clientes.',
+  'Requisitos típicos publicados: 3+ años de experiencia, 1+ año con React/React Native, 32-40 h/semana, ~4 h de overlap con horario US.',
+]
+
 export const g2iPracticeFormatSummary = [
-  'El live coding suele ser construir una mini app o componente desde cero (no clonar un template pesado).',
-  'Patrón histórico más reportado: una UI de trivia/quiz que consume Open Trivia DB (https://opentdb.com/api_config.php).',
-  'Los reviewers miran estructura de carpetas, componentes reutilizables, custom hooks, una capa fina de servicios y dueño claro del estado.',
-  'Importa manejar loading, error y estados vacíos, no solo el happy path.',
-  'Explicá tus decisiones en voz alta mientras codeás: por qué separás archivos, cómo manejás errores, qué agregarías con más tiempo.',
+  'El code challenge OFICIAL y verificado de G2i es un "Trivia Game": una app de 10 preguntas verdadero/falso que consume Open Trivia DB.',
+  'Consigna textual del challenge: "No implementes solo la solución más básica. Es tu oportunidad de lucirte e impresionar" usando técnicas avanzadas y best practices.',
+  'Se puntúa en: Funcionalidad, Formato del código, Estructura del proyecto, Escalabilidad, Mantenibilidad y uso de best practices de la industria.',
+  'Buscan específicamente: TypeScript (si lo sabés), state manager bien implementado, solución de navegación, componentización, separación entre lógica de negocio y UI, y best practices en llamadas a la API.',
+  'Reglas del challenge: NO usar boilerplates tipo React Boilerplate o Ignite (CRA sí está permitido); React Native debe usar el workflow de Expo CLI.',
+  'En la entrevista técnica (en vivo, en Replit) te piden snippets chicos y explicar cómo resolverías problemas de JS/React; explicá tus decisiones en voz alta.',
   'Los tests suman: al menos happy-path de fetch, estado de error y una interacción del usuario.',
 ]
 
@@ -73,7 +85,128 @@ export const openTriviaApiNotes = [
 
 export const g2iPracticeExercises: G2iPracticeExercise[] = [
   // ──────────────────────────────────────────────────────────────────
-  // 1. Trivia quiz — el clásico reportado de G2i
+  // 0. EL code challenge oficial de G2i (verificado en gists/repos públicos)
+  // ──────────────────────────────────────────────────────────────────
+  {
+    id: 'pr-g2i-official-challenge',
+    title: 'Code challenge OFICIAL de G2i: Trivia Game (10 preguntas V/F)',
+    category: 'react',
+    difficulty: 'senior',
+    timeLimit: 480,
+    sandbox: 'Proyecto local con CRA (NO boilerplates); RN con Expo CLI. Subilo a un repo.',
+    premise:
+      'Este es el code challenge real de G2i (de 6 a 8 horas, una sola vez). Creá una app de trivia de 10 preguntas verdadero/falso en la tecnología a la que aplicás (React Web, React Native, etc.), consumiendo Open Trivia DB. La consigna oficial dice: "No implementes solo la solución más básica. Es tu oportunidad de lucirte e impresionar". Implementá las pantallas con técnicas avanzadas y best practices de la industria. Las wireframes pueden estar incompletas: usá tu criterio para UI/UX.',
+    requirements: [
+      'Home screen con un texto y un botón BEGIN que navega a la pantalla de Quiz e inicia el juego',
+      'Quiz screen: card con la pregunta actual; el headline es la categoría de la pregunta; la siguiente aparece tras responder la actual',
+      'Score screen al terminar: muestra correctas/total y una lista de las preguntas con si se acertó o no; botón PLAY AGAIN que reinicia y vuelve al Home',
+      'Consumir Open Trivia DB (type=boolean, amount=10); manejar loading, error y vacío',
+      'Implementar correctamente un state manager (Context+reducer, Redux Toolkit, Zustand) — no useState desparramado',
+      'Implementar una solución de navegación (React Router en web; React Navigation en RN)',
+      'Componentización y separación de lógica de negocio vs UI; capa de servicios para la API',
+      'TypeScript si lo sabés; comunicación en el repo (README) y/o comentarios; tests de los caminos clave',
+      'NO usar boilerplates tipo React Boilerplate o Ignite (CRA está permitido); RN debe usar Expo CLI',
+    ],
+    baseCode: `# Estructura sugerida (creala vos, SIN boilerplates pesados):
+# src/
+#   services/triviaService.ts   -> fetchQuestions(): type=boolean&amount=10
+#   store/quizStore.ts          -> state manager (RTK / Zustand / Context+reducer)
+#   routes/AppRouter.tsx        -> Home / Quiz / Score (React Router)
+#   features/quiz/
+#     HomeScreen.tsx            -> botón BEGIN
+#     QuizScreen.tsx            -> QuestionCard + avance
+#     ScoreScreen.tsx           -> resultado + lista + PLAY AGAIN
+#     components/QuestionCard.tsx
+#   types/quiz.ts
+#
+# API (true/false):
+#   https://opentdb.com/api.php?amount=10&type=boolean
+#   (podés agregar &difficulty=hard&category=ID)
+#
+# Recordá: decodificar entidades HTML, manejar response_code, y separar
+# lógica de negocio de la UI. Mostrá tu nivel, no la versión mínima.
+`,
+    hints: [
+      'Lo que puntúan: Funcionalidad, Formato de código, Estructura, Escalabilidad, Mantenibilidad y best practices — apuntá a todas.',
+      'El headline de la card es la categoría de la pregunta (viene en el campo "category" de la API).',
+      'Para true/false: las opciones son fijas (True/False) y correct_answer es "True"/"False".',
+      'Dejá un README explicando decisiones (state manager elegido, estructura, qué harías con más tiempo): "Communication in the repo" es un criterio explícito.',
+      'Agregá tests (RTL): fetch ok, estado de error y una interacción (responder → score).',
+    ],
+    solution: `// Boceto de arquitectura que cumple la rúbrica de G2i.
+
+// services/triviaService.ts
+export type ApiQuestion = {
+  category: string
+  question: string
+  correct_answer: 'True' | 'False'
+}
+export async function fetchQuestions(): Promise<QuizQuestion[]> {
+  const res = await fetch('https://opentdb.com/api.php?amount=10&type=boolean')
+  const json = await res.json()
+  if (json.response_code !== 0) throw new Error('Trivia API error ' + json.response_code)
+  return (json.results as ApiQuestion[]).map((q, i) => ({
+    id: i,
+    category: decode(q.category),
+    prompt: decode(q.question),
+    correct: q.correct_answer,
+  }))
+}
+
+// store/quizStore.ts (Zustand: simple, testeable, sin boilerplate)
+import { create } from 'zustand'
+type Status = 'idle' | 'loading' | 'playing' | 'done' | 'error'
+type Answer = { id: number; picked: 'True' | 'False'; correct: boolean }
+export const useQuiz = create<{
+  status: Status; questions: QuizQuestion[]; index: number; answers: Answer[]
+  start: () => Promise<void>; answer: (v: 'True' | 'False') => void; reset: () => void
+}>((set, get) => ({
+  status: 'idle', questions: [], index: 0, answers: [],
+  start: async () => {
+    set({ status: 'loading' })
+    try { set({ questions: await fetchQuestions(), status: 'playing', index: 0, answers: [] }) }
+    catch { set({ status: 'error' }) }
+  },
+  answer: (picked) => {
+    const { questions, index, answers } = get()
+    const q = questions[index]
+    const next = [...answers, { id: q.id, picked, correct: picked === q.correct }]
+    const done = index + 1 >= questions.length
+    set({ answers: next, index: done ? index : index + 1, status: done ? 'done' : 'playing' })
+  },
+  reset: () => set({ status: 'idle', questions: [], index: 0, answers: [] }),
+}))
+
+// routes/AppRouter.tsx
+// <Routes>
+//   <Route path="/" element={<HomeScreen />} />        // botón BEGIN -> navigate('/quiz') + start()
+//   <Route path="/quiz" element={<QuizScreen />} />    // QuestionCard, headline = category
+//   <Route path="/score" element={<ScoreScreen />} />  // correctas/total + lista + PLAY AGAIN
+// </Routes>
+
+// QuizScreen: cuando status === 'done' -> navigate('/score').
+// ScoreScreen: score = answers.filter(a => a.correct).length; PLAY AGAIN -> reset() + navigate('/').
+
+// Tests (RTL + MSW): (1) carga y muestra la primera pregunta, (2) muestra error si la API falla,
+// (3) responder avanza y al final calcula el score correctamente.
+
+// README: explicar elección de Zustand vs Redux, estructura por features, separación
+// services/store/UI, y "con más tiempo agregaría: timer, dificultad configurable, a11y".`,
+    evaluationCriteria: [
+      'Funcionalidad completa según las 3 pantallas (Home → Quiz → Score → Play Again)',
+      'Estructura de proyecto clara y escalable; separación lógica de negocio / UI',
+      'State manager y navegación implementados correctamente (no useState suelto)',
+      'Best practices en API (servicio aislado, manejo de errores, decode de HTML)',
+      'Comunicación en el repo (README) y tests de caminos clave',
+      'Demuestra técnicas avanzadas, no la solución mínima',
+    ],
+    reportedByG2i: true,
+    sourceNote:
+      'VERIFICADO: spec pública del code challenge de G2i (gist DevanB/5d75c65… y repo matiasfha/g2i-challenge) + FAQ oficial de G2i (vetting de 6-8 h).',
+  },
+
+  // ──────────────────────────────────────────────────────────────────
+  // 1. Trivia quiz (multiple choice) — práctica del mismo formato
   // ──────────────────────────────────────────────────────────────────
   {
     id: 'pr-trivia-quiz',
@@ -254,7 +387,8 @@ export default function App() {
       'Naming legible y funciones chicas',
     ],
     reportedByG2i: true,
-    sourceNote: 'El quiz con Open Trivia DB es el ejercicio de live coding de G2i más citado por candidatos online.',
+    sourceNote:
+      'Variante multiple-choice del trivia. El challenge oficial de G2i (verificado) usa true/false; ver el ejercicio "Code challenge OFICIAL de G2i" arriba.',
   },
 
   // ──────────────────────────────────────────────────────────────────
