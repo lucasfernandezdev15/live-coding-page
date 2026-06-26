@@ -23,6 +23,11 @@ import {
   type G2iPracticeDifficulty,
   type G2iPracticeExercise,
 } from '@/data/g2i-practice-bank'
+import {
+  g2iEvaluationCriteria,
+  g2iLogisticsChecklist,
+  g2iPrepResources,
+} from '@/lib/g2iInterviewBrief'
 
 type Tab = 'theory' | 'practice'
 
@@ -156,6 +161,54 @@ export default function G2iStudyHub({ initialTab = 'theory' }: Props) {
                 <li key={line}>{line}</li>
               ))}
             </ul>
+          </section>
+
+          <section className="mb-6 grid gap-4 md:grid-cols-3">
+            <div className="rounded-lg border p-4" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide" style={{ color: 'var(--dim)' }}>
+                Logística (brief oficial)
+              </h3>
+              <ul className="list-disc space-y-1 pl-5 text-xs leading-relaxed" style={{ color: 'var(--muted)' }}>
+                {g2iLogisticsChecklist.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-lg border p-4" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide" style={{ color: 'var(--dim)' }}>
+                Qué evalúan
+              </h3>
+              <ul className="list-disc space-y-1 pl-5 text-xs leading-relaxed" style={{ color: 'var(--muted)' }}>
+                {g2iEvaluationCriteria.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-lg border p-4" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide" style={{ color: 'var(--dim)' }}>
+                Recursos sugeridos
+              </h3>
+              <ul className="space-y-1 text-xs leading-relaxed">
+                {g2iPrepResources.map((resource) => (
+                  <li key={resource.title}>
+                    {resource.url ? (
+                      <a
+                        href={resource.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline"
+                        style={{ color: 'var(--accent)' }}
+                      >
+                        {resource.title}
+                      </a>
+                    ) : (
+                      <span style={{ color: 'var(--text)' }}>{resource.title}</span>
+                    )}
+                    <span style={{ color: 'var(--muted)' }}> — {resource.description}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </section>
 
           <section className="mb-4 flex flex-wrap gap-2">

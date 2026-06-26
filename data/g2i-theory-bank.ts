@@ -12,6 +12,7 @@ export type G2iTheoryCategory =
   | 'react-native'
   | 'css-html'
   | 'testing'
+  | 'errores-comunes'
   | 'softskills'
   | 'system-design'
 
@@ -38,16 +39,19 @@ export const G2I_THEORY_CATEGORY_LABEL: Record<G2iTheoryCategory, string> = {
   'react-native': 'React Native',
   'css-html': 'CSS / HTML',
   testing: 'Testing',
+  'errores-comunes': 'Errores comunes',
   softskills: 'Soft skills',
   'system-design': 'Diseño / Arquitectura',
 }
 
+// Resumen alineado con el brief oficial de G2i (React Web Technical Interview).
 export const g2iTheoryFormatSummary = [
-  'Entrevista técnica de ~45 min con otro desarrollador React: preguntas de alto nivel y sobre snippets de código.',
-  'Temas: JavaScript, React, front-end y software engineering general. No es estilo LeetCode/algoritmos.',
-  'Te pueden pedir que escribas un snippet pequeño y expliques cómo resolverías un problema de JS/React.',
-  'Se evalúa tanto la respuesta correcta como cómo comunicás la idea técnica en voz alta.',
-  'El playground real suele ser Replit; el autocompletado es limitado, así que practicá explicando mientras escribís.',
+  'Entrevista de ~45 min en promedio con otro desarrollador React Web: preguntas de alto nivel y sobre snippets de código.',
+  'Te van a pedir escribir algún snippet pequeño y explicar problemas o cómo resolverías un problema de JavaScript/React.',
+  'Temas posibles: JavaScript, React, Front-End y Software Engineering en general. No es estilo LeetCode/algoritmos.',
+  'Cámara encendida (la sesión se graba para training interno y para evitar sesgo); probá mic y cámara en Google Meet, idealmente con auriculares con micrófono.',
+  'El playground es Replit (replit.com): creá la cuenta antes de la entrevista; el autocompletado es limitado, practicá explicando mientras escribís.',
+  'Saber leer y resolver mensajes de error comunes es un criterio de evaluación explícito (mirá la categoría "Errores comunes").',
   'Las preguntas marcadas "G2i" son temas que candidatos reportan online como recurrentes en el vetting de G2i.',
 ]
 
@@ -567,6 +571,106 @@ export const g2iTheoryQuestions: G2iTheoryQuestion[] = [
     reportedByG2i: true,
     sourceNote: 'El screening inicial de G2i incluye una charla no técnica que evalúa inglés y experiencia remota.',
   },
+
+  // ──────────────────────────────────────────────────────────────────
+  // Errores comunes (el brief de G2i evalúa explícitamente leer/resolver errores)
+  // ──────────────────────────────────────────────────────────────────
+  {
+    id: 'th-err-01',
+    category: 'errores-comunes',
+    difficulty: 'mid',
+    question:
+      'Aparece este error en consola:\n\n"Maximum update depth exceeded."\n\n¿Qué suele causarlo en React y cómo lo arreglás?',
+    answer:
+      'Un efecto o handler dispara setState en cada render, generando un loop infinito. Causas típicas: `useEffect` sin array de deps (o con una dep que cambia en cada render, como un objeto/array inline), `setState` llamado directo en el cuerpo del render, o deps inestables. Fix: poné el array de deps correcto, usá functional updates (`setX(prev => ...)`), memoizá las deps con `useMemo`/`useCallback`, o mové el `setState` a un event handler. Con "Highlight updates" del React DevTools ubicás el componente que cicla.',
+    tags: ['useEffect', 'infinite-loop', 'react'],
+    reportedByG2i: true,
+    sourceNote: 'G2i evalúa explícitamente si sabés leer y resolver mensajes de error comunes (brief oficial).',
+  },
+  {
+    id: 'th-err-02',
+    category: 'errores-comunes',
+    difficulty: 'mid',
+    question:
+      'Error:\n\n"Rendered more hooks than during the previous render." / "Invalid hook call."\n\n¿Qué hizo mal el desarrollador y cómo se corrige?',
+    answer:
+      'Se llamaron hooks de forma condicional o después de un early return, cambiando el orden/cantidad de hooks entre renders (React los identifica por orden de llamada). Otras causas del "Invalid hook call": llamar un hook fuera de un componente/custom hook (en una función normal, clase o handler), o tener copias duplicadas de React en el bundle. Fix: llamar siempre los hooks incondicionalmente al tope del componente y ramificar en el JSX o tras declararlos; deduplicar React en el bundler; reiniciar el dev server tras cambiar dependencias.',
+    tags: ['rules-of-hooks', 'react'],
+    reportedByG2i: true,
+    sourceNote: 'G2i evalúa explícitamente si sabés leer y resolver mensajes de error comunes (brief oficial).',
+  },
+  {
+    id: 'th-err-03',
+    category: 'errores-comunes',
+    difficulty: 'junior',
+    question:
+      'Error en un flujo de fetch en React:\n\n"Uncaught TypeError: Cannot read properties of undefined (reading \'map\')"\n\n¿Qué chequeás primero?',
+    answer:
+      'La data está `undefined` antes de que termine la carga, o el shape de la API es distinto al esperado. Estás llamando `.map` sobre algo que todavía no existe. Fix: optional chaining (`data?.map`), valor por defecto (`(data ?? []).map`), manejar estados de loading/error antes de renderizar la lista, y validar/tipar la respuesta. La regla: no toques `.map` hasta tener data.',
+    tags: ['undefined', 'fetch', 'react'],
+    reportedByG2i: true,
+    sourceNote: 'G2i evalúa explícitamente si sabés leer y resolver mensajes de error comunes (brief oficial).',
+  },
+  {
+    id: 'th-err-04',
+    category: 'errores-comunes',
+    difficulty: 'mid',
+    question:
+      'TypeScript marca:\n\n"Object is possibly \'undefined\'."\n\n¿Cómo lo resolvés sin abusar del `!`?',
+    answer:
+      'Estrechá el tipo antes de usar: optional chaining (`x?.prop`), guard clauses (`if (!x) return`), checks `if (x)`, valores por defecto, o early return. El non-null assertion (`!`) solo cuando tenés una invariante demostrada que TS no puede inferir. En React, muchas veces el fix real es manejar bien los estados de carga para que la UI no renderice antes de que exista la data.',
+    tags: ['narrowing', 'strict-null', 'typescript'],
+    reportedByG2i: true,
+    sourceNote: 'G2i evalúa explícitamente si sabés leer y resolver mensajes de error comunes (brief oficial).',
+  },
+  {
+    id: 'th-err-05',
+    category: 'errores-comunes',
+    difficulty: 'mid',
+    question:
+      'En el navegador:\n\n"Access to fetch at \'…\' from origin \'…\' has been blocked by CORS policy"\n\nExplicá CORS y los fixes prácticos.',
+    answer:
+      'El navegador bloquea respuestas cross-origin salvo que el servidor mande los headers `Access-Control-Allow-Origin` correctos. No se arregla solo desde el cliente: el servidor tiene que cooperar. Fixes: proxyar a través de una API same-origin (p.ej. una route `/api` en Next.js), configurar CORS en el backend, o hacer el fetch del lado del servidor (SSR). Para requests "no simples" además hay un preflight OPTIONS que el server debe responder.',
+    tags: ['cors', 'fetch', 'browser'],
+    reportedByG2i: true,
+    sourceNote: 'G2i evalúa explícitamente si sabés leer y resolver mensajes de error comunes (brief oficial).',
+  },
+  {
+    id: 'th-err-06',
+    category: 'errores-comunes',
+    difficulty: 'senior',
+    question:
+      'Error de hidratación en React/Next.js:\n\n"Text content did not match. Server: … Client: …"\n\n¿Qué patrones lo causan y cómo lo evitás?',
+    answer:
+      'Output de SSR no determinístico: `Date.now()`, `Math.random()`/IDs random, formateo por locale o zona horaria, APIs solo-de-browser usadas en el render, o HTML inválido mal anidado. El markup del server no coincide con el del cliente. Fix: renderizar valores volátiles dentro de `useEffect` (tras montar), usar `suppressHydrationWarning` con mucho criterio, asegurar markup idéntico server/cliente, y para widgets solo-cliente usar `dynamic(() => import(...), { ssr: false })`.',
+    tags: ['hydration', 'ssr', 'nextjs'],
+    reportedByG2i: true,
+    sourceNote: 'G2i evalúa explícitamente si sabés leer y resolver mensajes de error comunes (brief oficial).',
+  },
+  {
+    id: 'th-err-07',
+    category: 'errores-comunes',
+    difficulty: 'mid',
+    question:
+      'En Next.js (App Router):\n\n"You\'re importing a component that needs useState. This React hook only works in a client component."\n\n¿Cómo lo arreglás?',
+    answer:
+      'Agregá `"use client"` al tope del archivo del componente que usa estado/efectos, o mejor: separá en un wrapper server + un componente hoja cliente. Mantené los Server Components para el data fetching y pasá props serializables a los hijos cliente que necesitan interactividad. No marques toda la app como cliente: poné el límite lo más abajo posible en el árbol.',
+    tags: ['nextjs', 'rsc', 'use-client'],
+    reportedByG2i: true,
+    sourceNote: 'G2i evalúa explícitamente si sabés leer y resolver mensajes de error comunes (brief oficial).',
+  },
+  {
+    id: 'th-err-08',
+    category: 'errores-comunes',
+    difficulty: 'mid',
+    question:
+      'Error:\n\n"Uncaught ReferenceError: Cannot access \'X\' before initialization"\n\n¿Qué lo causa?',
+    answer:
+      'Estás usando una variable `let`/`const` antes de su declaración dentro del mismo scope (Temporal Dead Zone), o hay un import circular donde se accede a un binding antes de que termine de inicializarse el módulo. Fix: reordenar las declaraciones, usar function declarations para helpers que necesitás hoisteados, y romper las dependencias circulares (mover el código compartido a otro módulo o usar imports lazy).',
+    tags: ['tdz', 'modules', 'javascript'],
+    reportedByG2i: true,
+    sourceNote: 'G2i evalúa explícitamente si sabés leer y resolver mensajes de error comunes (brief oficial).',
+  },
 ]
 
 export const g2iTheoryCategories: G2iTheoryCategory[] = [
@@ -576,6 +680,7 @@ export const g2iTheoryCategories: G2iTheoryCategory[] = [
   'react-native',
   'css-html',
   'testing',
+  'errores-comunes',
   'system-design',
   'softskills',
 ]
