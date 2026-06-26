@@ -4,6 +4,9 @@ import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import {
   G2I_THEORY_CATEGORY_LABEL,
+  g2iEvaluationCriteriaEs,
+  g2iLogisticsChecklistEs,
+  g2iPrepResourcesEs,
   g2iTheoryCategories,
   g2iTheoryFormatSummary,
   g2iTheoryQuestions,
@@ -24,11 +27,6 @@ import {
   type G2iPracticeDifficulty,
   type G2iPracticeExercise,
 } from '@/data/g2i-practice-bank'
-import {
-  g2iEvaluationCriteria,
-  g2iLogisticsChecklist,
-  g2iPrepResources,
-} from '@/lib/g2iInterviewBrief'
 
 type Tab = 'theory' | 'practice'
 
@@ -170,7 +168,7 @@ export default function G2iStudyHub({ initialTab = 'theory' }: Props) {
                 Logística (brief oficial)
               </h3>
               <ul className="list-disc space-y-1 pl-5 text-xs leading-relaxed" style={{ color: 'var(--muted)' }}>
-                {g2iLogisticsChecklist.map((line) => (
+                {g2iLogisticsChecklistEs.map((line) => (
                   <li key={line}>{line}</li>
                 ))}
               </ul>
@@ -180,7 +178,7 @@ export default function G2iStudyHub({ initialTab = 'theory' }: Props) {
                 Qué evalúan
               </h3>
               <ul className="list-disc space-y-1 pl-5 text-xs leading-relaxed" style={{ color: 'var(--muted)' }}>
-                {g2iEvaluationCriteria.map((line) => (
+                {g2iEvaluationCriteriaEs.map((line) => (
                   <li key={line}>{line}</li>
                 ))}
               </ul>
@@ -190,7 +188,7 @@ export default function G2iStudyHub({ initialTab = 'theory' }: Props) {
                 Recursos sugeridos
               </h3>
               <ul className="space-y-1 text-xs leading-relaxed">
-                {g2iPrepResources.map((resource) => (
+                {g2iPrepResourcesEs.map((resource) => (
                   <li key={resource.title}>
                     {resource.url ? (
                       <a

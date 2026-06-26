@@ -55,6 +55,44 @@ export const g2iTheoryFormatSummary = [
   'Las preguntas marcadas "G2i" son temas que candidatos reportan online como recurrentes en el vetting de G2i.',
 ]
 
+// Versiones en español del brief oficial (logística, criterios y recursos),
+// para que la sección G2i quede 100% en español sin tocar el simulador en inglés.
+export const g2iLogisticsChecklistEs = [
+  'Cámara encendida: la entrevista se graba para training interno y para reducir sesgos.',
+  'Probá mic y cámara con Google Meet antes de la sesión; se recomienda auriculares con micrófono.',
+  'Ubicate en un lugar tranquilo y profesional antes de entrar.',
+  'Creá una cuenta en Replit (https://replit.com): se usa como playground para compartir snippets en vivo.',
+  'En el IDE en vivo el autocompletado suele ser limitado: practicá explicando mientras escribís.',
+]
+
+export const g2iEvaluationCriteriaEs = [
+  'Qué tan bien comunicás ideas técnicas',
+  'Profundidad de tu conocimiento de JavaScript y React',
+  'Experiencia real construyendo aplicaciones React en producción',
+  'Capacidad para leer y resolver mensajes de error comunes',
+  'Confianza y claridad bajo presión',
+]
+
+export const g2iPrepResourcesEs = [
+  {
+    title: 'Exploring JavaScript (antes "JS for impatient programmers")',
+    url: 'https://exploringjs.com/js/book/index.html',
+    description:
+      'Fundamentos modernos de JS, gratis online. El link del brief de G2i (impatient-js) está desactualizado; el libro se renombró y mudó acá.',
+  },
+  {
+    title: 'React — conceptos principales',
+    url: 'https://react.dev/learn',
+    description: 'Docs oficiales de React: componentes, estado, efectos y flujo de datos.',
+  },
+  {
+    title: 'Tus proyectos previos',
+    url: '',
+    description:
+      'Prepará historias: qué construiste con React, qué tradeoffs hiciste, bugs que arreglaste y cómo lo llevaste a producción.',
+  },
+]
+
 export const g2iTheoryStudyTips = [
   'Respondé en voz alta con la estructura: Contexto → Enfoque → Tradeoffs → Cómo lo verifico en producción.',
   'Si no sabés algo, decí cómo lo investigarías; G2i valora honestidad y razonamiento sobre memorización.',
